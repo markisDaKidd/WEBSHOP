@@ -1,0 +1,130 @@
+/* @import url("https://fonts.googleapis.com/css2?family=Londrina+Outline&display=swap"); */
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-size: 1vw;
+  font-family: "Courier New", Courier, monospace;
+  font-weight: bold;
+  background-color: #f8f8ff;
+  min-height: 100vh;
+}
+
+main {
+  font-weight: lighter;
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+  min-height: 100vh;
+  width: 100%;
+}
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: black;
+  padding: 1%;
+  height: 2vh;
+}
+
+.wrapper-account {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+}
+
+.login-container {
+  margin-top: 10%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  width: 20%;
+  height: 40%;
+}
+#login-form input {
+  display: block;
+  margin-bottom: 2em;
+}
+
+.route-link:visited,
+.route-link {
+  text-decoration: none;
+  color: inherit;
+}
+.card-cont {
+  display: flex;
+  flex-direction: column;
+}
+
+.cart-cont {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  min-width: 15vw;
+}
+
+.img-card {
+  width: 15vw;
+}
+
+.img-cart {
+  width: 10vw;
+}
+
+.card-head {
+  text-align: center;
+}
+
+.buy-cont {
+  opacity: 0;
+  position: relative;
+  text-align: center;
+  height: 100%;
+  bottom: 50%;
+}
+
+.buy-cont:hover {
+  opacity: initial;
+  position: relative;
+  text-align: center;
+  height: 100%;
+  bottom: 50%;
+}
+.buy-button {
+  color: white;
+  background-color: #4eb5f1;
+  border-radius: 0.8em;
+  box-sizing: border-box;
+  border-width: 0;
+}
+
+.buy-button:active {
+  background-color: #2f6b8d;
+}
+.add-to-cart {
+  color: white;
+  background-color: #4eb5f1;
+  border-radius: 0.8em;
+  box-sizing: border-box;
+  border-width: 0;
+}
+.plus-minus-cont {
+  opacity: 0;
+  display: flex;
+  justify-content: space-evenly;
+}
+.plus-minus-cont-display {
+  opacity: initial;
+}
+.plus-minus {
+  width: 1.5em;
+  border-radius: 1em;
+  background-color: #4eb5f1;
+  box-sizing: border-box;
+  border-width: 0;
+}
