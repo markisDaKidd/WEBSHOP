@@ -1,20 +1,24 @@
-import React from 'react';
+import React,{createContext, useState} from 'react';
 import ReactDOM from 'react-dom';
+import thunk from 'redux-thunk'
 import App from './components/App';
-import {createStore} from 'redux'
+import {createStore, applyMiddleware} from 'redux'
 import {Provider} from 'react-redux'
 import Items from './Redux/reducers'
 import {persistStore,persistReducer} from 'redux-persist'
 import { PersistGate } from 'redux-persist/integration/react';
 import storage from 'redux-persist/lib/storage'
+import Test from'./components/Test'
+
+let context = createContext()
 let config ={
   key:'root',
   storage,
 }
 let ItemsPersist = persistReducer(config,Items)
-
-let store = createStore(ItemsPersist,window._REDUX_DEVTOOLS_EXTENSION_)
+let store = createStore(ItemsPersist,window._REDUX_DEVTOOLS_EXTENSION_,applyMiddleware(thunk))
 let persistor = persistStore(store)
+
 
 
 ReactDOM.render(
@@ -27,5 +31,7 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById('root')
 );
+
+
 
 

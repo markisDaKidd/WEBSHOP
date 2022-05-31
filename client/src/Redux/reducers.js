@@ -22,7 +22,11 @@ import { combineReducers } from "redux"
 
  const Items=(state={},action)=>{
      let id = action.id;
+
     switch (action.type) {
+        case 'COPY':
+            return action.copy
+
         case 'ADD-ITEM':
              if (state.hasOwnProperty(action.id)) {
                  return {
@@ -37,33 +41,22 @@ import { combineReducers } from "redux"
              }
 
         case 'DEL-ITEM':
-            if (state[action.id].count===0) {
-                return delete state[action.id]
+            delete state[action.key]
+
+            
+            return {
+                ...state
             }
-            return state[action.id]={...state[action.id],count:state[action.id].count-1}
 
         case 'LOGOUT':
             return {}
+
         default:
             return state
     }
 }
 
-const User=(state={},action)=>{
-    switch (action.type) {
-        case "LOGIN":
-            return{
-                username:action.username,
-                email:action.email
-            }
 
-        case "LOGOUT":
-            return {}
-    
-        default:
-            return state
-    }
 
-}
 
-export default combineReducers({Items,User})
+export default combineReducers({Items})

@@ -1,4 +1,4 @@
-import React,{useState,useRef,memo} from 'react';
+import React,{useState,useRef,memo, useEffect} from 'react';
 import { useSelector,useDispatch } from 'react-redux';
 import { ADD } from '../Redux/actions';
 
@@ -13,7 +13,7 @@ import { ADD } from '../Redux/actions';
 
     const handleButton=()=>{
         if (buttonRef.current.classList.contains('add-to-cart')) {
-            dispatch(ADD(count,item.itemId,item.item.images.icon,item.item.name))
+            dispatch(ADD(state_items,count,item.itemId,item.item.images.icon,item.item.name))
             console.log(state_items);
             buttonRef.current.classList.toggle('add-to-cart')
             plus_minusRef.current.classList.toggle('plus-minus-cont-display')
@@ -26,6 +26,10 @@ import { ADD } from '../Redux/actions';
         plus_minusRef.current.classList.toggle('plus-minus-cont-display')
       
     }
+
+    useEffect(()=>{
+        console.log(count);
+    },[count])
 
     
     return(

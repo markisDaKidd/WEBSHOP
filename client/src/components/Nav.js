@@ -1,26 +1,50 @@
-import React, { useEffect, useState,useLayoutEffect } from 'react';
+import React, { useEffect, useState,useLayoutEffect, useContext } from 'react';
 import cart from'../images/cart.svg'
 import cookies from 'js-cookie'
 import { Link } from 'react-router-dom';
+import {LOGOUT} from '../Redux/actions'
+import {useDispatch} from 'react-redux'
+import { Context } from './App';
+
 
 
 export default function Nav(){
 
-    let [logout,handleLog]= useState(false)
+    // let user = JSON.stringify(cookies.get('user')) || null
 
-    let handleLogout=()=>{
-        handleLog(true)
-    }
+    // let [logout,handleLog]= useState(false)
+
+    // let handleLogout=()=>{
+    //     handleLog(true)
+    // }
+
+    let dispatch = useDispatch()
+    let {user, setIsLoggedIn}= useContext(Context)
+
+    let LOGOUTDiv= <div style={{display:'flex',justifyContent:'center'}}><h1 style={{cursor:'pointer'}} onClick={()=>setIsLoggedIn(false)}>LOGOUT</h1></div>
+    let NORMALDiv = <div style={{display:'flex',justifyContent:'center'}}>
+    <h1>
+        <Link className='route-link' to='/login'>Login |</Link>        
+    </h1>
+
+    <h1>
+        <Link className='route-link' to='/create' >| Create</Link> 
+    </h1>
+</div>
 
     useEffect(()=>{
-        if (logout===true) {
+        if (user===false) {
             cookies.remove('user')
-        }
-        handleLog(state=>false)
-    
-    },[logout])
+            dispatch(LOGOUT())
+            return
 
-    let user = JSON.stringify(cookies.get('user'))
+        }
+        setIsLoggedIn(true)
+        
+    
+    },[user])
+
+    
     
     return(
         <nav>
@@ -29,17 +53,9 @@ export default function Nav(){
                 MetaShop
                 </h1>
             </div>
-            {user?<div style={{display:'flex',justifyContent:'center'}}><h1>{user.username}</h1> <h1 style={{cursor:'pointer'}} onClick={handleLogout}>LOGOUT</h1></div>:
-                <div style={{display:'flex',justifyContent:'center'}}>
-                    <h1>
-                        <Link className='route-link' to='/login'>Login |</Link>        
-                    </h1>
 
-                    <h1>
-                        <Link className='route-link' to='/create' >| Create</Link> 
-                    </h1>
-                </div>
-                    }
+
+            {user?LOGOUTDiv:NORMALDiv}
            
 
             <div>

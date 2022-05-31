@@ -1,10 +1,16 @@
-import React, { useEffect,useState } from 'react';
+import React, { useContext, useEffect,useState } from 'react';
 import cookies from'js-cookie'
 import { useNavigate } from 'react-router-dom';
+import { LOGIN } from '../Redux/actions';
+import { useDispatch, useSelector } from 'react-redux';
+import { Context } from './App';
 
 
 
 export default function Login(){
+    let dispatch=useDispatch()
+    let state_items=useSelector(state=>(state.Items))
+
     let navigate = useNavigate()
     let initialState={username:'',password:''}
     let [send,setSend]=useState(false)
@@ -21,6 +27,8 @@ export default function Login(){
         setState({...formState,[e.target.name]:e.target.value})
     }
 
+    let {setIsLoggedIn} = useContext(Context)
+
     useEffect(()=>{
         if (send===true) {
             let response
@@ -31,9 +39,11 @@ export default function Login(){
                 if (res.answer==='ok') {
                     let user = JSON.parse(cookies.get('user'))
                     console.log(user.username);
-                    setTimeout(()=>{
-                        navigate('/')
-                    },1000)
+                    dispatch(LOGIN(state_items))
+                    setIsLoggedIn(true)
+                    navigate('/')
+                    
+                   
                     
                 }
             })
@@ -41,6 +51,8 @@ export default function Login(){
             setSend(false)
         }
     },[send])
+
+    
     return(
         <div className ='wrapper-account'>
               <div className='login-container'>
