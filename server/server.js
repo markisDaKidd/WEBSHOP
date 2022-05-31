@@ -1,7 +1,7 @@
 require('dotenv').config()
 let fetch = require('node-fetch')
 let path = require('path')
-let mail = require('nodemailer')
+let nodemailer = require('nodemailer')
 let express = require('express')
 let cookie= require('cookie-parser')
 let cors = require('cors')
@@ -20,8 +20,8 @@ let app = express()
 
 
 app.use(cookie())
-app.use(helmet())
-app.use(cors({origin:'http://localhost:3000',credentials: true}))
+// app.use(helmet())
+app.use(cors({origin:'*',credentials: true}))
 app.use(hpp())
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
@@ -31,7 +31,9 @@ app.use(express.static(path.join(__dirname, '../client/build')))
 // [{price_data:{currency:'usd',product_data:{name:'aaalll'},unit_amount:10000},quantity:1}]
 
 
-
+// app.get('/',(req,res)=>{
+//     res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
+// })
 app.post('/checkout',async (req,res)=>{
     let user_items;
     let products;
@@ -90,7 +92,7 @@ app.post('/webhook', express.raw({type: 'application/json'}), async (request, re
         return {filename:user.cart[key].name, path: user.cart[key].image}
     })
 
-
+    console.log(event.type, event);
   
     //// Handle the event
     switch (event.type) {
@@ -192,7 +194,8 @@ app.put('/cart',(req,res)=>{
     
     let cart = req.body.cart
     let key = req.body.key
-    let user_cookie = JSON.parse(req.cookies.user);
+    console.log(JSON.stringify(req.cookies.user));
+    let user_cookie = JSON.parse(req.cookies['user'])?JSON.parse(req.cookies['user']):'hello world';
     console.log(user_cookie,req.body);
 
     if(req.query.q==='login'){
@@ -268,7 +271,7 @@ app.put('/cart',(req,res)=>{
 
 mongoose.connect('mongodb://localhost:27017/users',{useUnifiedTopology:true}).then(()=>{
     console.log('database up');
-    app.listen(80,()=>{
+    app.listen(8080,()=>{
         console.log('server up');
         
     })

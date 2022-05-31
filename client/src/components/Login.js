@@ -33,12 +33,11 @@ export default function Login(){
         if (send===true) {
             let response
 
-            fetch('http://localhost:5000/login',{headers: { 'Accept': 'application/json','Content-Type': 'application/json'},
+            fetch('http://localhost:8080/login',{headers: { 'Accept': 'application/json','Content-Type': 'application/json'},
             method:'POST',credentials:'include',body:JSON.stringify(formState)}).then(res=>res.json()).then(res=>{
                 console.log(res)
                 if (res.answer==='ok') {
-                    let user = JSON.parse(cookies.get('user'))
-                    console.log(user.username);
+        
                     dispatch(LOGIN(state_items))
                     setIsLoggedIn(true)
                     navigate('/')

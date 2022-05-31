@@ -22,7 +22,7 @@ export default function Create(){
     useEffect(()=>{
         if (send===true) {
             let response
-            fetch('http://localhost:5000/create',{headers: { 'Accept': 'application/json','Content-Type': 'application/json'},method:'POST',body:JSON.stringify(formState)}).then(res=>res.json()).then(res=>{
+            fetch('http://localhost:8080/create',{headers: { 'Accept': 'application/json','Content-Type': 'application/json'},method:'POST',body:JSON.stringify(formState)}).then(res=>res.json()).then(res=>{
                 if (res.answer==='ok') {
                     navigate('/')
                 }

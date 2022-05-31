@@ -10,7 +10,7 @@ export default function Cart(){
     let item_state = useSelector(state=>(state.Items))
     let dispatch = useDispatch()
     let handleFetch=()=>{
-        fetch('http://localhost:5000/checkout',{headers:{ 'Accept': 'application/json','Content-Type': 'application/json'},
+        fetch('http://localhost:8080/checkout',{headers:{ 'Accept': 'application/json','Content-Type': 'application/json'},
         method:'POST',credentials:'include'}).then(res=>res.json()).then(res=>{
             console.log(res);
             window.location.href=res.url

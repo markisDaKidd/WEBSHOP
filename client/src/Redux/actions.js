@@ -23,7 +23,7 @@ export const ADD=(state,countt,idd,imagee,namee)=>{
                 }
             } 
 
-            fetch('http://localhost:5000/cart?q=add',{headers:{ 'Accept': 'application/json','Content-Type': 'application/json'},
+            fetch('http://localhost:8080/cart?q=add',{headers:{ 'Accept': 'application/json','Content-Type': 'application/json'},
         method:'PUT',credentials:'include',body:JSON.stringify({cart})}).then(res=>res.json()).then(res=>{
 
             dispatch({type:'ADD-ITEM',id:idd,count:countt,image:imagee,name:namee })
@@ -43,7 +43,7 @@ export const DECR=(keyy)=>{
     return (dispatch)=>{
         dispatch({type:'UPDATE-SERVER'})
 
-        fetch('http://localhost:5000/cart?q=delete',{headers:{ 'Accept': 'application/json','Content-Type': 'application/json'},
+        fetch('http://localhost:8080/cart?q=delete',{headers:{ 'Accept': 'application/json','Content-Type': 'application/json'},
         method:'PUT',credentials:'include',body:JSON.stringify({key:keyy})}).then(res=>res.json()).then(res=>{
 
             dispatch({type:'DEL-ITEM',key:keyy})
@@ -55,7 +55,7 @@ export const DECR=(keyy)=>{
 export const LOGIN=(state)=>{
     return (dispatch)=>{
 
-        fetch('http://localhost:5000/cart?q=login',{headers:{ 'Accept': 'application/json','Content-Type': 'application/json'},
+        fetch('http://localhost:8080/cart?q=login',{headers:{ 'Accept': 'application/json','Content-Type': 'application/json'},
         method:'PUT',credentials:'include',body:JSON.stringify({cart:state})}).then(res=>res.json()).then(res=>{
         let data = res.answer==='exists'?res.cart :state
             console.log(data);
