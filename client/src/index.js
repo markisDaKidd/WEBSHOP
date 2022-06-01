@@ -8,7 +8,7 @@ import Items from './Redux/reducers'
 import {persistStore,persistReducer} from 'redux-persist'
 import { PersistGate } from 'redux-persist/integration/react';
 import storage from 'redux-persist/lib/storage'
-import Test from'./components/Test'
+
 
 let context = createContext()
 let config ={

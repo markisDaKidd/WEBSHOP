@@ -33,7 +33,7 @@ export default function Login(){
         if (send===true) {
             let response
 
-            fetch('http://localhost:8080/login',{headers: { 'Accept': 'application/json','Content-Type': 'application/json'},
+            fetch('http://localhost:3000/login',{headers: { 'Accept': 'application/json','Content-Type': 'application/json'},
             method:'POST',credentials:'include',body:JSON.stringify(formState)}).then(res=>res.json()).then(res=>{
                 console.log(res)
                 if (res.answer==='ok') {

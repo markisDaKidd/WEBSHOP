@@ -269,9 +269,9 @@ app.put('/cart',(req,res)=>{
 
 
 
-mongoose.connect('mongodb://localhost:27017/users',{useUnifiedTopology:true}).then(()=>{
+mongoose.connect(process.env.MONGO_URI,{useUnifiedTopology:true}).then(()=>{
     console.log('database up');
-    app.listen(8080,()=>{
+    app.listen(3000,()=>{
         console.log('server up');
         
     })
