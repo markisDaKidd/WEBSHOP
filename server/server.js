@@ -1,4 +1,5 @@
 require('dotenv').config()
+let fs = require('fs')
 let fetch = require('node-fetch')
 let path = require('path')
 let nodemailer = require('nodemailer')
@@ -89,7 +90,9 @@ app.post('/webhook', express.raw({type: 'application/json'}), async (req, res) =
     let files;
 
     files = Object.keys(user.cart).map(key=>{
-        return {filename:user.cart[key].name, path: user.cart[key].image}
+
+        return {filename:user.cart[key].name+'.png', href: user.cart[key].image}
+        
     })
 
     console.log(files);
