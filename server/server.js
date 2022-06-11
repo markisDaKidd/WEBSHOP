@@ -5,7 +5,6 @@ let nodemailer = require('nodemailer')
 let express = require('express')
 let cookie= require('cookie-parser')
 let cors = require('cors')
-let helmet = require('helmet')
 let hpp = require('hpp')
 let mongoose = require('mongoose')
 let bcrypt = require('bcrypt')
@@ -18,22 +17,21 @@ let transporter = nodemailer.createTransport({service:'gmail',auth:{user:'mardor
 
 let app = express()
 
-
+app.use((req, res, next) => {
+    if (req.originalUrl === '/webhook') {
+      next(); // Do nothing with the body because I need it in a raw state.
+    } else {
+      express.json()(req, res, next);  // ONLY do express.json() if the received request is NOT a WebHook from Stripe.
+    }});
 app.use(cookie())
-// app.use(helmet())
 app.use(cors({origin:'*',credentials: true}))
 app.use(hpp())
-app.use(express.json())
+// app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 app.use(express.static(path.join(__dirname, '../client/build')))
 
 
-// [{price_data:{currency:'usd',product_data:{name:'aaalll'},unit_amount:10000},quantity:1}]
 
-
-// app.get('/',(req,res)=>{
-//     res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
-// })
 app.post('/checkout',async (req,res)=>{
     let user_items;
     let products;
@@ -72,19 +70,21 @@ app.post('/checkout',async (req,res)=>{
      }
 })
 
-app.post('/webhook', express.raw({type: 'application/json'}), async (request, response) => {
-    const sig = request.headers['stripe-signature'];
+app.post('/webhook', express.raw({type: 'application/json'}), async (req, res) => {
+    const sig = req.headers['stripe-signature'];
   
     let event;
   
     try {
-      event = stripe.webhooks.constructEvent(request.body, sig, process.env.ENDPOINT_SECRET);
+      event = stripe.webhooks.constructEvent(req.body, sig, process.env.ENDPOINT_SECRET);
+      console.log(event);
     } catch (err) {
-      response.status(400).send(`Webhook Error: ${err.message}`);
+      res.status(400).send(`Webhook Error: ${err.message}`);
       return;
     }
 
-    let user = await UserModel.findOne({email:event.data.user_email})
+    let user = await UserModel.findOne({email:event.data.object.receipt_email})
+    console.log(user);
 
     let files;
 
@@ -92,27 +92,28 @@ app.post('/webhook', express.raw({type: 'application/json'}), async (request, re
         return {filename:user.cart[key].name, path: user.cart[key].image}
     })
 
-    console.log(event.type, event);
+    console.log(files);
+
   
-    //// Handle the event
+    
     switch (event.type) {
-        //event.data.customer_email
-        case 'checkout.session.completed':
-        const session = event.data.object;
-        // Then define and call a function to handle the event checkout.session.completed
-        let mailOptions = {from:'mardor3645@gmail.com', to:event.data.customer_email, subject:'ORDER', text:'we hope you enjoy your oder!',attachments:files}
-        transporter.sendMail(mailOptions,(err,success)=>{
-        if(err) return res.status(500).send('error')
-        return res.status(200).send('success')
-        })
+        
+        case 'payment_intent.succeeded':
+
+            let mailOptions = {from:'mardor3645@gmail.com', to:event.data.object.receipt_email, subject:'ORDER', text:'we hope you enjoy your oder!',attachments:files}
+            return transporter.sendMail(mailOptions,(err,success)=>{
+            if(err) return res.status(500).send('error')
+            return res.sendStatus(200)
+            })
+
         break;
-        // ... handle other event types
+        
         default:
         console.log(`Unhandled event type ${event.type}`);
     }
   
-    // Return a 200 response to acknowledge receipt of the event
-    response.send(200);
+    
+    res.status(200).send('okok');
   });
 
 app.post('/login',(req,res)=>{
@@ -264,9 +265,9 @@ app.put('/cart',(req,res)=>{
    }
 )
 
-
-
-
+app.get('/test', (req, res)=>{
+    res.json({'hello':'12345'})
+})
 
 
 mongoose.connect(process.env.MONGO_URI,{useUnifiedTopology:true}).then(()=>{
